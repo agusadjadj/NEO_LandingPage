@@ -9,6 +9,36 @@
     btn.setAttribute("aria-expanded", open);
   });
 
+  // Fotos: cada recuadro con data-img busca su archivo en assets/img/ (jpg, webp o png).
+  // Si no está, queda el recuadro gris que dice qué foto va.
+  var EXT = ["jpg", "webp", "png", "jpeg"];
+  function loadImg(el) {
+    var base = el.dataset.img, k = 0;
+    var old = el.querySelector(":scope > img.ph-img");
+    if (old) old.remove();
+    el.classList.remove("has-img");
+    (function next() {
+      if (k >= EXT.length) return;
+      var img = new Image();
+      img.className = "ph-img";
+      img.alt = el.getAttribute("aria-label") || "";
+      img.onload = function () {
+        if (el.dataset.img !== base) return; // el visor ya pasó a otra foto
+        el.insertBefore(img, el.firstChild);
+        el.classList.add("has-img");
+      };
+      img.onerror = next;
+      img.src = "/assets/img/" + base + "." + EXT[k++];
+    })();
+  }
+  var phs = document.querySelectorAll("[data-img]");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); loadImg(e.target); } });
+    }, { rootMargin: "400px" });
+    phs.forEach(function (el) { io.observe(el); });
+  } else phs.forEach(loadImg);
+
   // Filas de tabla que llevan a una ficha
   document.querySelectorAll("tr[data-href]").forEach(function (tr) {
     tr.addEventListener("click", function () { location.href = tr.dataset.href; });
@@ -59,10 +89,15 @@
     var caption = viewer.querySelector(".ph-what");
     var thumbs = document.querySelectorAll(".thumbs button");
     var names = JSON.parse(viewer.dataset.names);
+    var frame = viewer.querySelector(".ph");
+    var folder = location.pathname.split("/").pop().replace(/\.html$/, "") || "neo-18";
     var show = function (n) {
       i = (n - 1 + total) % total + 1;
       label.forEach(function (l) { l.textContent = String(i).padStart(2, "0") + " / " + total; });
       caption.textContent = names[i - 1];
+      frame.setAttribute("aria-label", names[i - 1]);
+      frame.dataset.img = folder + "/foto-" + String(i).padStart(2, "0");
+      loadImg(frame);
       thumbs.forEach(function (t, k) { t.setAttribute("aria-current", k === i - 1); });
     };
     document.querySelectorAll("[data-prev]").forEach(function (b) { b.addEventListener("click", function () { show(i - 1); }); });
@@ -72,6 +107,7 @@
       if (e.key === "ArrowLeft") show(i - 1);
       if (e.key === "ArrowRight") show(i + 1);
     });
+    show(1);
   }
 
   // Formulario: mientras no esté conectado Formspree/Web3Forms, la consulta sale por WhatsApp

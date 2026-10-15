@@ -93,6 +93,10 @@ section { padding: 96px 0; }
 .ph .ph-what { max-width: 70%; text-align: center; font-size: 14px; font-weight: 400; }
 .ph .ph-what::before { content: ""; display: block; width: 28px; height: 22px; margin: 0 auto 12px; border: 1.5px solid currentColor; border-radius: 3px; opacity: .7; }
 .ph-sign { position: absolute; left: 16px; bottom: 12px; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: inherit; opacity: .85; }
+/* Foto cargada en assets/img/: tapa el recuadro y deja la firma encima */
+.ph > img.ph-img, .hero > img.ph-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ph.has-img .ph-what { display: none; }
+.ph.has-img .ph-sign { color: #fff; opacity: .9; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
 .r-16x9 { aspect-ratio: 16/9; min-height: 0; }
 .r-4x3 { aspect-ratio: 4/3; min-height: 0; }
 .r-3x4 { aspect-ratio: 3/4; min-height: 0; }
@@ -107,7 +111,9 @@ section { padding: 96px 0; }
 .hero::before { content: ""; position: absolute; inset: 0; background:
   linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.45) 100%),
   repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 120px); }
-.hero .wrap { position: relative; width: 100%; padding-bottom: 72px; }
+.hero::before { z-index: 1; }
+.hero .wrap { position: relative; z-index: 2; width: 100%; padding-bottom: 72px; }
+.hero-photo-note { z-index: 2; }
 .hero-photo-note { position: absolute; top: 24px; right: var(--gutter); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #a8a8a8; text-align: right; }
 .hero p { max-width: 460px; color: #d8d8d8; margin-top: 24px; }
 .hero-foot { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
