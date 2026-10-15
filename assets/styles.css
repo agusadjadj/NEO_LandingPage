@@ -66,7 +66,7 @@ section { padding: 96px 0; }
 .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 24px; }
 .logo { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
-.logo-mark { width: 22px; height: 34px; }
+.logo-mark { width: 20px; height: 34px; }
 .logo-word { font-size: 30px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
 .nav { display: flex; gap: 28px; }
 .nav a { text-decoration: none; font-size: 15px; font-weight: 400; color: var(--ink); }
